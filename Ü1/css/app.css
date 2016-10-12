@@ -26,6 +26,14 @@ h1{
     font-size: 3em;
 }
 
+a{
+    color: white;
+    text-decoration: none;
+}
+a:hover{
+    color: #004050;
+}
+
 section{
     float: left;
 }
@@ -39,7 +47,7 @@ video{
     margin-right: auto;
     width: 70%;
     display: block;
-    margin-top: 5%;
+    padding-top: 5%;
     margin-bottom: 5%;
 }
 
@@ -52,7 +60,7 @@ nav{
     padding-bottom: 10%;
     color: white;
     font-weight: 600;
-    background-color: #d31800;
+    background-color: #dddddd;
     position: fixed;
     width: 20%;
 }
@@ -61,6 +69,39 @@ ul li{
     list-style-type: none;
     margin-top: 10%;
     font-size: 1.1em;
+}
+img{
+    width: 7%;
+}
+
+.btnPlay {
+    -webkit-border-radius: 28;
+    -moz-border-radius: 28;
+    border-radius: 28px;
+    color: white;
+    background: #34db4e;
+    padding: 5px 10px 5px 10px;
+    text-decoration: none;
+    border: none;
+}
+.btnPlay:hover {
+  background: #2dbe44;
+  text-decoration: none;
+}
+.btnPause {
+    -webkit-border-radius: 28;
+    -moz-border-radius: 28;
+    border-radius: 28px;
+    color: white;
+    background: #dba834;
+    padding: 5px 10px 5px 10px;
+    text-decoration: none;
+    border: none;
+}
+
+.btnPause:hover {
+  background: #c69831;
+  text-decoration: none;
 }
 
 /***FOOTER***/
