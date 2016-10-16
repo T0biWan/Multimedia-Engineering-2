@@ -60,7 +60,7 @@ nav{
     padding-bottom: 10%;
     color: white;
     font-weight: 600;
-    background-color: #dddddd;
+    background-color: #008db1;
     position: fixed;
     width: 20%;
 }
@@ -75,8 +75,6 @@ img{
 }
 
 .btnPlay {
-    -webkit-border-radius: 28;
-    -moz-border-radius: 28;
     border-radius: 28px;
     color: white;
     background: #34db4e;
@@ -89,8 +87,6 @@ img{
   text-decoration: none;
 }
 .btnPause {
-    -webkit-border-radius: 28;
-    -moz-border-radius: 28;
     border-radius: 28px;
     color: white;
     background: #dba834;
@@ -110,4 +106,19 @@ footer{
     background-color: #004050;
     padding-top: 1%;
     padding-bottom: 1%;
+}
+
+footer div{
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+footer div a{
+    padding-left: 5%;
+    padding-right: 5%;
+}
+footer div a:hover{
+    color: white;
+    text-decoration: underline;
 }
