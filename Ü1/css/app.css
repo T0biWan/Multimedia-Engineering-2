@@ -12,6 +12,8 @@ body{
 main{
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: row;
 }
 
 header{
@@ -34,13 +36,9 @@ a:hover{
     color: #004050;
 }
 
-section{
-    float: left;
-}
-
 /***HAUPTBEREICH***/
 .hauptbereich{
-    width: 80%;
+    flex: 1 0 80%;
 }
 video{
     margin-left: auto;
@@ -53,7 +51,7 @@ video{
 
 /***SEITENBEREICH***/
 .seitenbereich{
-    width: 20%;
+    flex: 1 0 20%;
 }
 nav{
     padding-top: 8%;
@@ -110,7 +108,6 @@ li a{
 
 /***FOOTER***/
 footer{
-    clear: both;
     background-color: #004050;
     padding-top: 1%;
     padding-bottom: 1%;
