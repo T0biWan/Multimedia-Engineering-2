@@ -37,7 +37,7 @@ a:hover{
 }
 
 /***HAUPTBEREICH***/
-.hauptbereich{
+section{
     flex: 1 0 80%;
 }
 video{
@@ -50,7 +50,7 @@ video{
 }
 
 /***SEITENBEREICH***/
-.seitenbereich{
+aside{
     flex: 1 0 20%;
 }
 nav{
@@ -131,7 +131,6 @@ footer div a:hover{
 
 
 /***MEDIA QUERIES***/
-
 @media screen and (max-width: 1300px) {
     
     a{
