@@ -23,22 +23,30 @@
                 var button = buttonArray[i];
                 var video = videoArray[i];
                 button.addEventListener("click", function() {
-                    playOrPauseVideoDependingOnStatus(video, button);
+                    playOrPauseVideoDependingOnStatus(video);
+                    changeButtonAppearanceDependingOnStatus(video, button);
                     switchButton();
                    });
             })();
         }
     }
 
-    function playOrPauseVideoDependingOnStatus(video, button) {
+    function playOrPauseVideoDependingOnStatus(video) {
         var videoIsPaused = video.paused;
         if (videoIsPaused) {
             video.play();
+        } else {
+            video.pause();
+        }
+    }
+    
+    function changeButtonAppearanceDependingOnStatus(video, button){
+        var videoIsPaused = video.paused;
+        if (videoIsPaused) {
             button.classList.add("btnPause");
             button.innerHTML = "PAUSE";
             button.classList.remove("btnPlay");
         } else {
-            video.pause();
             button.classList.add("btnPlay");
             button.innerHTML = "PLAY";
             button.classList.remove("btnPause");
