@@ -23,16 +23,16 @@
                 var button = buttonArray[i];
                 var video = videoArray[i];
                 button.addEventListener("click", function() {
-                    playOrPauseVideoDependingOnStatus(video);
-                    changeButtonAppearanceDependingOnStatus(video, button);
+                    var videoIsPaused = video.paused;
+                    playOrPauseVideoDependingOnStatus(videoIsPaused, video);
+                    changeButtonAppearanceDependingOnStatus(videoIsPaused, video, button);
                     switchButton();
                    });
             })();
         }
     }
 
-    function playOrPauseVideoDependingOnStatus(video) {
-        var videoIsPaused = video.paused;
+    function playOrPauseVideoDependingOnStatus(videoIsPaused, video) {
         if (videoIsPaused) {
             video.play();
         } else {
@@ -40,18 +40,39 @@
         }
     }
     
-    function changeButtonAppearanceDependingOnStatus(video, button){
-        var videoIsPaused = video.paused;
+    function changeButtonAppearanceDependingOnStatus(videoIsPaused, video, button){
         if (videoIsPaused) {
             button.classList.add("btnPause");
             button.innerHTML = "PAUSE";
             button.classList.remove("btnPlay");
-        } else {
+        } 
+       else {
             button.classList.add("btnPlay");
             button.innerHTML = "PLAY";
             button.classList.remove("btnPause");
         }
+    
     }
+    
+    function resetButtonWhenVideoIsFinished (){
+        var buttonArray = document.getElementsByTagName("button");
+        var videoArray = document.getElementsByTagName("video");
+
+        for (i = 0; i < buttonArray.length; i++) {
+            (function () {
+                var button = buttonArray[i];
+                var video = videoArray[i];
+                var videoIsFinished = video.ended;
+                if (videoIsFinished){
+                    button.classList.add("btnPlay");
+                    button.innerHTML = "PLAY";
+                    button.classList.remove("btnPause");            
+                }
+            })();
+        }               
+    }
+    
+    window.setInterval(resetButtonWhenVideoIsFinished,1000);
     
     function switchButton(){
         console.log("Test");
