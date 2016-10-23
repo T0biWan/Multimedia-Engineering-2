@@ -26,7 +26,6 @@
                     var videoIsPaused = video.paused;
                     playOrPauseVideoDependingOnStatus(videoIsPaused, video);
                     changeButtonAppearanceDependingOnStatus(videoIsPaused, video, button);
-                    switchButton();
                    });
             })();
         }
@@ -66,15 +65,12 @@
                 if (videoIsFinished){
                     button.classList.add("btnPlay");
                     button.innerHTML = "PLAY";
-                    button.classList.remove("btnPause");            
+                    button.classList.remove("btnPause");
+                    console.log("Video zuende");
                 }
             })();
         }               
     }
     
     window.setInterval(resetButtonWhenVideoIsFinished,1000);
-    
-    function switchButton(){
-        console.log("Test");
-    }
 })();
