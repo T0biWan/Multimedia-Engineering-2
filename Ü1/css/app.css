@@ -58,7 +58,7 @@ video{
 }
 
 /***SEITENBEREICH***/
-aside{
+.sidearea{
     flex: 1 0 20%;
 }
 nav{
