@@ -1,0 +1,180 @@
+/**
+* @author: Leon Rösler
+* @author: Marlon Mattern
+* @author: Tobias Klatt
+* Datei: app.css
+* Datum: 16.10.2016
+*/
+
+html{
+    font-family: sans-serif;
+    color: white;
+}
+
+body{
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+main{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+header{
+    background-color: #004050;
+    padding-top: 10%;
+    padding-bottom: 5%;
+}
+
+h1{
+    text-align: center;
+    font-family: lato;
+    font-size: 3em;
+}
+
+a{
+    color: white;
+    text-decoration: none;
+}
+a:hover{
+    color: #004050;
+}
+
+/***HAUPTBEREICH***/
+section{
+    flex: 1 1 80%;
+}
+video{
+    margin-left: auto;
+    margin-right: auto;
+    width: 70%;
+    display: block;
+    padding-top: 5%;
+    margin-bottom: 5%;
+}
+
+/***SEITENBEREICH***/
+.sidearea{
+    flex: 1 1 20%;
+}
+nav{
+    padding-top: 2%;
+    padding-bottom: 2%;
+    color: white;
+    font-weight: 600;
+    background-color: #008db1;
+    position: fixed;
+    width: 20%;
+}
+
+ul li{
+    list-style-type: none;
+    margin-top: 10%;
+    font-size: 1.1em;
+}
+
+.btnPlay {
+    border-radius: 28px;
+    color: white;
+    background: #34db4e;
+    padding: 5px 10px 5px 10px;
+    text-decoration: none;
+    border: none;
+}
+.btnPlay:hover {
+  background: #2dbe44;
+  text-decoration: none;
+}
+
+.btnPause {
+    border-radius: 28px;
+    color: white;
+    background: #dba834;
+    padding: 5px 10px 5px 10px;
+    text-decoration: none;
+    border: none;
+}
+.btnPause:hover {
+  background: #c69831;
+  text-decoration: none;
+}
+
+li button{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 65px;
+}
+li a{
+    vertical-align: middle;
+}
+
+
+/***FOOTER***/
+footer{
+    background-color: #004050;
+    padding-top: 1%;
+    padding-bottom: 1%;
+}
+
+footer div{
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+footer div a{
+    padding-left: 5%;
+    padding-right: 5%;
+}
+footer div a:hover{
+    color: white;
+    text-decoration: underline;
+}
+
+
+/***MEDIA QUERIES***/
+@media screen and (max-width: 1300px) {
+    
+    a{
+        display: block;
+    }
+    button{
+        display: block;
+        margin-top: 2%;
+    }
+
+    h1{
+        font-size: 2.5em;
+    }
+    nav{
+        padding-left: 2%;
+    }
+}
+
+
+@media screen and (max-width: 600px) {
+    
+    section{
+        flex: 1 1 70%;
+    }
+    
+    nav{
+        padding-left: 0;
+        width: 30%;
+    }
+    a{
+        font-size: .8em;
+    }
+    button{
+        width: 15px;
+        font-size: 0.6em;
+    }
+
+    h1{
+        font-size: 2em;
+    }
+}
