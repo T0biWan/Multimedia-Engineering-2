@@ -1,10 +1,10 @@
 {
-  "name": "Aufgabe 2",
+  "name": "task_2",
   "version": "1.0.0",
-  "description": "A small Hello World example with express",
+  "description": "We are able to install node.js. We can handle the node package manager including the installation of several packages which are necessary for this exercise. We also know how to use the package.json file and are briefed about his importance.In addition we are able to configure our own first webserver with node by using the express framework.",
   "keywords": [
-    "server",
-    "client",
+    "documentation",
+    "T0biWan",
     "browser"
   ],
   "main": "app.js",
