@@ -8,7 +8,7 @@ app.use('/public', express.static('static'));
 
 app.get('/time' , function(req, res) {
 	res.set('Content-Type', 'text/plain');
-	res.send(timestamp.getHours() + ":" + timestamp.getMinutes() + ":" + timestamp.getSeconds() + );
+	res.send(timestamp.getHours() + ":" + timestamp.getMinutes() + ":" + timestamp.getSeconds() );
 	
 });
 app.get('/*' , function(req, res) {
