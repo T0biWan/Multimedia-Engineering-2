@@ -3,23 +3,23 @@
   "version": "1.0.0",
   "description": "We are able to install node.js. We can handle the node package manager including the installation of several packages which are necessary for this exercise. We also know how to use the package.json file and are briefed about his importance.In addition we are able to configure our own first webserver with node by using the express framework.",
   "keywords": [
-      "documentation",
-      "T0biWan",
-      "browser",
-      "tast_2",
-      "MME2"
+    "documentation",
+    "T0biWan",
+    "browser",
+    "tast_2",
+    "MME2"
   ],
   "main": "app.js",
   "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
-      "type": "git",
-      "url": "https://github.com/T0biWan/Multimedia-Engineering-2"
+    "type": "git",
+    "url": "https://github.com/T0biWan/Multimedia-Engineering-2"
   },
   "author": "#div",
   "license": "ISC",
   "dependencies": {
-      "express": "^4.14.0"
+    "express": "^4.14.0"
   }
 }
