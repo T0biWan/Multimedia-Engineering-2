@@ -71,11 +71,11 @@ app.use(function(request, respond, next) {
 app.get('/tweets', function(request,respond,next) {
     var tweets = store.select('tweets');
     for(var i=0; i<tweets.length; i++){
-        addhref(request, tweets[i], tweets[i].id, null);
+        appendhref(request, tweets[i], tweets[i].id, null);
     }
 
     var object = {};
-    object = addhref(request, object, null, null);
+    object = appendhref(request, object, null, null);
     object.items = tweets;
     respond.json(object);
 });
@@ -94,7 +94,7 @@ app.post('/tweets', function(request,res,next) {
  */
 app.get('/tweets/:id', function(request,respond,next) {
     var object = store.select('tweets', request.params.id);
-    object = addhref(request, object, null, null);
+    object = appendhref(request, object, null, null);
     respond.json(object);
 });
 
@@ -140,18 +140,18 @@ app.get('/users/:id', function(request,respond,next) {
     var tweets = store.select('tweets');
     var userID = user.id;
     var tweetsOfUser = [];
-    user = addhref(request, user, null, null);
+    user = appendhref(request, user, null, null);
 
     for(var i=0;i<tweets.length;i++) {
         var tweetCreatorHref = tweets[i].creator.href;
         var pattern = new RegExp("\/"+userID+"$");
         if(pattern.test(tweetCreatorHref)) { // does tweetCreatorHref contain userID?
-            tweetsOfUser.push(addhref(request, tweets[i], tweets[i].id, '/tweets/'));
+            tweetsOfUser.push(appendhref(request, tweets[i], tweets[i].id, '/tweets/'));
         }
     }
 
     user.tweets = {
-        href : addhref(request, user, null, null).href,
+        href : appendhref(request, user, null, null).href,
         items : tweetsOfUser
     };
     respond.json(user);
@@ -196,8 +196,11 @@ app.patch("/users/:id", function(req, res){
 });
 
 // functions
-
-function addhref(request, object, id, url){
+/*
+ * Appends a href from a request to a given object.
+ * Optional a id and/or a url can be given as arguments.
+ */
+function appendhref(request, object, id, url){
     if(url == null) url = request.originalUrl;
     if(id == null) {
         var Url = request.protocol + '://' + request.get('host') + url;
