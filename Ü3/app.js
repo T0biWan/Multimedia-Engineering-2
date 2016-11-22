@@ -177,20 +177,14 @@ app.put('/users/:id', function(request,respond,next) {
  * patch specific user
  */
 app.patch("/users/:id", function(req, res){
-
-    var firstname = req.body.firstname;
-    var lastname = req.body.lastname;
     var user = store.select('users', req.params.id);
-
-    if (firstname !== undefined){
-        user.firstname = firstname;
+    if (req.body.firstname !== undefined){
+        user.firstname = req.body.firstname;
     }
-
-    if(lastname !== undefined){
-        user.lastname = lastname;
+    if(req.body.lastname !== undefined){
+        user.lastname = req.body.lastname;
     }
-
-    store.replace('users', req.params.id, req.body);
+    store.replace('users', req.params.id, user);
     res.status(200).end();
 
 });
