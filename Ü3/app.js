@@ -64,7 +64,6 @@ app.use(function(request, respond, next) {
 
 
 // Tweet routes
-
 /*
  * this method returns all tweets
  */
@@ -115,7 +114,6 @@ app.put('/tweets/:id', function(request,respond,next) {
 });
 
 // User routes
-
 /*
  * this method returns all users
  */
@@ -199,13 +197,13 @@ function appendhref(request, object, id, url){
     if(id == null) {
         var Url = request.protocol + '://' + request.get('host') + url;
     } else {
-        var Url = request.protocol + '://' + request.get('host') + url + id;
+        var Url = request.protocol + '://' + request.get('host') + url + '/' +id;
     }
     object.href = Url;
     return object;
 }
-// CatchAll for the rest (unfound routes/resources) ********
 
+// CatchAll for the rest (unfound routes/resources) ********
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
     var err = new Error('Not Found');
