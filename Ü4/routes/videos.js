@@ -31,7 +31,7 @@ router.route('/videos/')
     .get(function(request, response, next) {
         var videos = store.select('videos');
         response.status(200).json(videos);
-        next();
+       // next();
     })
     .post(function(req,res,next) {
         // TODO

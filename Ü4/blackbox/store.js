@@ -26,7 +26,7 @@ var globalCounter = (function() {
     }
 })();
 
-//get current Timestamp
+// Get current Timestamp
 var currentTimestamp = (function () {
     return function () {
         return new Date().getTime();
@@ -39,7 +39,7 @@ var memory = {};
 var videos = [{
     id: globalCounter(),
     title:"How to cut in Photoshop",
-    description: '',
+    description:'',
     src:"https://www.youtube.com/watch?v=FmH12c5loIs",
     length:7,
     timestamp:globalCounter(),
@@ -49,7 +49,7 @@ var videos = [{
     id: globalCounter(),
     title:"Cinema 4D Basic Tutorial",
     description:"Getting started with the basics in Cinema 4D",
-    src: "https://www.youtube.com/watch?v=nEdV3ruDcvw",
+    src:"https://www.youtube.com/watch?v=nEdV3ruDcvw",
     length:900,
     timestamp:globalCounter(),
     playcount:2,
@@ -57,7 +57,6 @@ var videos = [{
 }];
 
 memory.videos = videos;
-// some default store content could be added here
 
 //** private helper functions
 /**
@@ -83,8 +82,6 @@ var getDeepObjectCopy = function(object) {
 };
 
 var store = {
-
-
     /** Selects all of one specific element from a given type list
      *
      * @param [string} type - the String identifier of the DB table
