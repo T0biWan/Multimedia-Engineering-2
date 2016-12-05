@@ -27,8 +27,8 @@ var internalKeys = {id: 'number', timestamp: 'number'};
 
 // routes **********************
 videos.route('/')
-    .get(function(req, res, next) {
-        // TODO
+    .get(function(request, response, next) {
+        response.status(200).json(store.select('videos'));
         next();
     })
     .post(function(req,res,next) {
@@ -37,7 +37,29 @@ videos.route('/')
     });
 // TODO
 
+// CRUD Operations for ID route
+videos.route('/:id')
+    .get(function (request,respond,next) {
+     var  videoSelection = store.select('videos',req.params.id);
+        if(videoSelection === undefined) {
+            respond.status(404).json("{}");
+        }
+        else {respond.status(200).json(videoSelection)}
+    })
+    .post(function (request,respond,next) {
+        next();
+        
+    })
 
+    .put(function (request,respond,next) {
+        store.replace('videos', request.params.id, request.body);
+        respond.status(200).end();
+
+
+    })
+    .delete (function(request,respond,next) {
+        store.remove('videos', request.params.id);
+        respond.status(200).end(); });
 
 // this middleware function can be used, if you like (or remove it)
 videos.use(function(req, res, next){
