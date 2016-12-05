@@ -40,7 +40,7 @@ router.route('/videos/')
 
 router.route('/videos/:id')
     .get(function (request,respond,next) {
-        var  videoSelection = store.select('router',req.params.id);
+        var  videoSelection = store.select('router',request.params.id);
         if(videoSelection === undefined) {
             respond.status(404).json("{}");
         }
