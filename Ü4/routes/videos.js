@@ -24,26 +24,37 @@ var optionalKeys = {description: 'string', playcount: 'number', ranking: 'number
 var internalKeys = {id: 'number', timestamp: 'number'};
 
 
+
 // routes **********************
-router.route('/')
+router.route('/videos')
+    // Return all videos
     .get(function(req, res, next) {
-        var videos = store.select('videos');
         next();
     })
+    // Create new video
     .post(function(req,res,next) {
-        var id = store.insert('router', req.body);
-        res.status(201).json(store.select('router', id));
         next();
+    })
+    .put(function(req,res,next) {
+        next()
+    })
+    .delete(function(req,res,next) {
+        next()
     });
 
-router.route('/:id')
+router.route('/videos/:id')
+    // Select video with id
     .get(function(req, res, next) {
-        var videos = store.select('videos');
         next();
     })
     .post(function(req,res,next) {
-        // TODO
         next();
+    })
+    .put(function(req,res,next) {
+        next()
+    })
+    .delete(function(req,res,next) {
+        next()
     });
 
 
