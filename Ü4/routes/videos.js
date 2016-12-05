@@ -26,9 +26,10 @@ var internalKeys = {id: 'number', timestamp: 'number'};
 
 
 // routes **********************
-videos.route('/')
+videos.route('/videos/')
     .get(function(request, response, next) {
-        response.status(200).json(store.select('videos'));
+        var videos = store.select('videos');
+        response.status(200).json(videos);
         next();
     })
     .post(function(req,res,next) {

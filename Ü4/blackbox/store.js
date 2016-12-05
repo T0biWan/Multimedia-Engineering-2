@@ -24,8 +24,14 @@ var globalCounter = (function() {
     return function() {
         return ++i;
     }
-
 })();
+
+//get current Systemtimestamp
+var currentTimestamp = (function () {
+    return function () {
+        return new Date().getTime();
+    }
+});
 
 // our "in memory database" is a simple object!
 var memory = {};
