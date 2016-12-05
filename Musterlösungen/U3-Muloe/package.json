@@ -1,0 +1,16 @@
+{
+  "name": "me2-u3_rest_in_node_solution",
+  "version": "1.0",
+  "author": "Johannes Konert",
+  "description": "A simple prototypical REST API for users and tweets",
+  "licence": "CC BY-SA 4.0",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "body-parser": "~1.13.2",
+    "debug": "~2.2.0",
+    "express": "~4.13.1"
+  }
+}
