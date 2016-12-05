@@ -1,0 +1,12 @@
+{
+  "posts": [
+    {
+      "name": "John",
+      "message": "I dedicate my first post to all digital natives."
+    },
+    {
+      "name": "Jenny",
+      "message": "Computer science and media? A great field to study."
+    }
+  ]
+}
