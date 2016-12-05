@@ -26,36 +26,38 @@ var globalCounter = (function() {
     }
 })();
 
-var currentTimestamp = (function() {
-    return function(){
+//get current Timestamp
+var currentTimestamp = (function () {
+    return function () {
         return new Date().getTime();
     }
-})();
+});
 
 // our "in memory database" is a simple object!
 var memory = {};
-// some default store content could be added here
+
 var videos = [{
     id: globalCounter(),
     title:"How to cut in Photoshop",
     description: '',
     src:"https://www.youtube.com/watch?v=FmH12c5loIs",
     length:7,
-    timestamp:currentTimestamp(),
+    timestamp:globalCounter(),
     playcount:0,
     ranking:0
-
 },{
     id: globalCounter(),
     title:"Cinema 4D Basic Tutorial",
     description:"Getting started with the basics in Cinema 4D",
     src: "https://www.youtube.com/watch?v=nEdV3ruDcvw",
     length:900,
-    timestamp:currentTimestamp(),
+    timestamp:globalCounter(),
     playcount:2,
     ranking:5
-
 }];
+
+memory.videos = videos;
+// some default store content could be added here
 
 //** private helper functions
 /**
