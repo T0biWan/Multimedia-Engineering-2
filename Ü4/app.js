@@ -48,9 +48,6 @@ app.use('/videos', videos);
 
 
 
-
-
-
 // (from express-generator boilerplate  standard code)
 // Errorhandling and requests without proper URLs ************************
 // catch 404 and forward to error handler
@@ -96,7 +93,7 @@ app.listen(3000, function(err) {
     if (err !== undefined) {
         console.log('Error on startup, ',err);
     } else {
-        debug('Listening on port ' + port);
         console.log('Magic happens on port ' + port);
+        debug('Listening on port ' + port);
     }
 });

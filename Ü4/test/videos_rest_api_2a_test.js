@@ -17,7 +17,7 @@ var videoURL = cfg.videoURL;
 
 
 // some helper objects and function to be send to node ********************************************
-var videoURL = baseURL + 'router';
+var videoURL = baseURL + 'videos';
 var codes = cfg.codes;
 var videoCorrectMin = cfg.videoCorrectMin;
 var videoCorrectMax = cfg.videoCorrectMax;
@@ -27,7 +27,7 @@ describe.skip('Task 2.a Filter', function() {
     var videoCorrect1Result = null;
     var videoCorrect2Result = null;
     var videoIDsCleanup = [];
-    describe('/router REST API Filtering', function() {
+    describe('/videos REST API Filtering', function() {
         // ask for correct filters
         it('should again create a video on post', function(done) {
             request(videoURL)
@@ -48,7 +48,7 @@ describe.skip('Task 2.a Filter', function() {
                     done();
                 });
         });
-        it('should correctly filter router by given keys title,src', function(done) {
+        it('should correctly filter videos by given keys title,src', function(done) {
                 request(videoURL)
                 .get('/'+videoCorrect1Result.id+'?filter=src,title')
                 .set('Accept-Version', '1.0')
@@ -95,7 +95,7 @@ describe.skip('Task 2.a Filter', function() {
 
         });
     });
-    // delete the  posted router at end if not already deleted...
+    // delete the  posted videos at end if not already deleted...
     after(function(done) {
         var numDone = videoIDsCleanup.length;
         for (var i = 0; i < videoIDsCleanup.length; i++) {

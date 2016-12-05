@@ -24,14 +24,14 @@ var videoURL = cfg.videoURL;
 
 
 // some helper objects and function to be send to node ********************************************
-var videoURL = baseURL + 'router';
+var videoURL = baseURL + 'videos';
 var codes = cfg.codes;
 var videoCorrectMin = cfg.videoCorrectMin;
 var videoCorrectMax = cfg.videoCorrectMax;
 
 // start of tests ********************************************************************************
 describe('Clean /video REST API with empty store', function() {
-    var videoIDsCleanup = []; // will be used as temp-store in test...to cleanup router at the end
+    var videoIDsCleanup = []; // will be used as temp-store in test...to cleanup videos at the end
     
     it('should send status 204 and empty body on first request (empty database store)', function (done) {
         request(videoURL)
@@ -79,7 +79,7 @@ describe('Clean /video REST API with empty store', function() {
             })
     });
 
-    // delete the  posted router at end if not already deleted...
+    // delete the  posted videos at end if not already deleted...
     after(function(done) {
         var numDone = videoIDsCleanup.length;
         for (var i = 0; i < videoIDsCleanup.length; i++) {

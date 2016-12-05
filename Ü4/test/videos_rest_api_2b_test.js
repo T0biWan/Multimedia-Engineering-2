@@ -17,7 +17,7 @@ var videoURL = cfg.videoURL;
 
 
 // some helper objects and function to be send to node ********************************************
-var videoURL = baseURL + 'router';
+var videoURL = baseURL + 'videos';
 var codes = cfg.codes;
 var videoCorrectMin = cfg.videoCorrectMin;
 var videoCorrectMax = cfg.videoCorrectMax;
@@ -30,7 +30,7 @@ describe.skip('Task 2.b Limits and Offset', function() {
     var totalResults = [];
     var total = 0;
     var videoIDsCleanup = [];
-    describe('/router REST API Filling by Posts (prepare)', function() {
+    describe('/videos REST API Filling by Posts (prepare)', function() {
         // ask for correct filters
         it('should again create a video on post', function(done) {
             request(videoURL)
@@ -104,7 +104,7 @@ describe.skip('Task 2.b Limits and Offset', function() {
                     done();
                 });
         });
-        it('should deliver all router without any limits or offsets', function(done) {
+        it('should deliver all videos without any limits or offsets', function(done) {
             request(videoURL)
                 .get('/')
                 .set('Accept-Version', '1.0')
@@ -123,7 +123,7 @@ describe.skip('Task 2.b Limits and Offset', function() {
     });
     // here start the real limit/offset tests with the data inserted above **************
     describe("now testing limit and offset", function() {
-        it('should deliver 2 router less on offset=2', function(done) {
+        it('should deliver 2 videos less on offset=2', function(done) {
             request(videoURL)
                 .get('/?offset=2')
                 .set('Accept-Version', '1.0')
@@ -138,7 +138,7 @@ describe.skip('Task 2.b Limits and Offset', function() {
                     done();
                 });
         });
-        it('should deliver all router on offset=0', function(done) {
+        it('should deliver all videos on offset=0', function(done) {
             request(videoURL)
                 .get('/?offset=0')
                 .set('Accept-Version', '1.0')
@@ -169,7 +169,7 @@ describe.skip('Task 2.b Limits and Offset', function() {
                     done();
                 });
         });
-        it('should deliver the last 2 items on offset=[number of router - 2]&limit=100', function(done) {
+        it('should deliver the last 2 items on offset=[number of videos - 2]&limit=100', function(done) {
             request(videoURL)
                 .get('/?limit=100&offset='+(total-2))
                 .set('Accept-Version', '1.0')
@@ -268,7 +268,7 @@ describe.skip('Task 2.b Limits and Offset', function() {
                 });
         });
     });
-    // delete the  posted router at end if not already deleted...
+    // delete the  posted videos at end if not already deleted...
     after(function(done) {
         var numDone = videoIDsCleanup.length;
         for (var i = 0; i < videoIDsCleanup.length; i++) {
