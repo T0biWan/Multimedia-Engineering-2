@@ -17,7 +17,7 @@ var express = require('express');
 var logger = require('debug')('me2u4:videos');
 var store = require('../blackbox/store');
 
-var videos = express.Router();
+var router = express.Router();
 
 // if you like, you can use this for task 1.b:
 var requiredKeys = {title: 'string', src: 'string', length: 'number'};
@@ -26,7 +26,7 @@ var internalKeys = {id: 'number', timestamp: 'number'};
 
 
 // routes **********************
-videos.route('/')
+router.route('/') // = http://localhost:3000/videos
     .get(function(request, response, next) {
         var videos = store.select('videos');
         response.status(200).json(videos);
@@ -38,7 +38,7 @@ videos.route('/')
         next();
     });
 
-videos.route('/:id')
+router.route('/:id') // = http://localhost:3000/videos/<id>
     .get(function(request, response, next) {
         var videos = store.select('videos');
         next();
@@ -51,7 +51,7 @@ videos.route('/:id')
 
 
 // this middleware function can be used, if you like (or remove it)
-videos.use(function(request, response, next){
+router.use(function(request, response, next){
     // if anything to send has been added to response.locals.items
     if (response.locals.items) {
         // then we send it as json and remove it
@@ -64,4 +64,4 @@ videos.use(function(request, response, next){
     }
 });
 
-module.exports = videos;
+module.exports = router;
