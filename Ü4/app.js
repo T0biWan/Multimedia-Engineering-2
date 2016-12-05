@@ -25,9 +25,8 @@ var store = require('./blackbox/store.js');
 var restAPIchecks = require('./restapi/request-checks.js');
 var videos = require('./routes/videos');
 
-
-
 // app creation
+var port = 3000;
 var app = express();
 
 // Middlewares *************************************************
@@ -91,8 +90,8 @@ if (app.get('env') === 'development') {
 app.listen(3000, function(err) {
     if (err !== undefined) {
         console.log('Error on startup, ',err);
-    }
-    else {
-        debug('Listening on port 3000');
+    } else {
+        console.log('Magic happens on port ' + port);
+        debug('Listening on port 3000 ' + port);
     }
 });
