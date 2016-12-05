@@ -27,23 +27,23 @@ var internalKeys = {id: 'number', timestamp: 'number'};
 
 // routes **********************
 videos.route('/')
-    .get(function(req, res, next) {
+    .get(function(request, response, next) {
         var videos = store.select('videos');
-        res.status(200).json(videos);
+        response.status(200).json(videos);
         next();
     })
-    .post(function(req,res,next) {
-        var id = store.insert('videos', req.body);
-        res.status(201).json(store.select('videos', id));
+    .post(function(request,response,next) {
+        var id = store.insert('videos', request.body);
+        response.status(201).json(store.select('videos', id));
         next();
     });
 
 videos.route('/:id')
-    .get(function(req, res, next) {
+    .get(function(request, response, next) {
         var videos = store.select('videos');
         next();
     })
-    .post(function(req,res,next) {
+    .post(function(request,response,next) {
         // TODO
         next();
     });
@@ -51,16 +51,16 @@ videos.route('/:id')
 
 
 // this middleware function can be used, if you like (or remove it)
-videos.use(function(req, res, next){
-    // if anything to send has been added to res.locals.items
-    if (res.locals.items) {
+videos.use(function(request, response, next){
+    // if anything to send has been added to response.locals.items
+    if (response.locals.items) {
         // then we send it as json and remove it
-        res.json(res.locals.items);
-        delete res.locals.items;
+        response.json(response.locals.items);
+        delete response.locals.items;
     } else {
         // otherwise we set status to no-content
-        res.set('Content-Type', 'application/json');
-        res.status(204).end(); // no content;
+        response.set('Content-Type', 'application/json');
+        response.status(204).end(); // no content;
     }
 });
 
