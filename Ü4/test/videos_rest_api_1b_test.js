@@ -17,7 +17,7 @@ var videoURL = cfg.videoURL;
 
 
 // some helper objects and function to be send to node ********************************************
-var videoURL = baseURL + 'videos';
+var videoURL = baseURL + 'router';
 var codes = cfg.codes;
 var videoCorrectMin = cfg.videoCorrectMin;
 var videoCorrectMax = cfg.videoCorrectMax;
@@ -28,7 +28,7 @@ describe.skip('Task 1.b JSON Error data', function() {
     var videoCorrect1Result = null;
     var videoCorrect2Result = null;
     var videoIDsCleanup = [];
-    describe('/videos REST API POST', function() {
+    describe('/router REST API POST', function() {
         // good POSTs
         it('should save a proper POST with required fields and add all missing ones with default-values', function(done) {
             var startDate = new Date();
@@ -141,7 +141,7 @@ describe.skip('Task 1.b JSON Error data', function() {
         });
     });
     // *******************************************************
-    describe('/videos REST API PUT', function() {
+    describe('/router REST API PUT', function() {
         // good PUTs
         it('should save a proper PUT with required fields and change in .length', function(done) {
             videoCorrect1Result.length = 4*60+2;
@@ -240,7 +240,7 @@ describe.skip('Task 1.b JSON Error data', function() {
         });
     });
     // *******************************************************
-    describe('/videos REST API DELETE', function() {
+    describe('/router REST API DELETE', function() {
         // good DELETEs
         it('should properly delete and answer with code 204', function(done) {
             request(videoURL)
@@ -272,7 +272,7 @@ describe.skip('Task 1.b JSON Error data', function() {
                 })
         });
     });
-    // delete the  posted videos at end if not already deleted...
+    // delete the  posted router at end if not already deleted...
     after(function(done) {
         var numDone = videoIDsCleanup.length;
         for (var i = 0; i < videoIDsCleanup.length; i++) {

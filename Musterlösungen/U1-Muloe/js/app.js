@@ -7,7 +7,7 @@
 
 window.addEventListener("load", function(event) {
     var videos = document.getElementsByTagName("video");
-    // videos is not an array but a NodeList, thus for each does not work
+    // router is not an array but a NodeList, thus for each does not work
     for (var i = 0; i < videos.length; i++) {
         var video = videos[i];
         // find the elements after the video for controls play, pause, stop

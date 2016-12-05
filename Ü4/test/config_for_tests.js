@@ -11,7 +11,7 @@
 module.exports.baseURL = 'http://localhost:3000/';
 
 // some helper objects and function to be send to node ********************************************
-module.exports.videoURL = module.exports.baseURL + 'videos';
+module.exports.videoURL = module.exports.baseURL + 'router';
 module.exports.codes = {
     success: 200,
     created: 201,

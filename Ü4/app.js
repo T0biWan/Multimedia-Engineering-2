@@ -42,7 +42,7 @@ app.use(restAPIchecks);
 
 
 // Routes ******************************************************
-app.use('/videos', videos);
+app.use('/router', videos);
 
 
 
