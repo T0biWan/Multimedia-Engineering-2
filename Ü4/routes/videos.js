@@ -35,13 +35,22 @@ videos.route('/')
         respond.status(200).json(videos).end();
 
     }})
-    .post(function(req,res,next) {
+    .post(function(request,respond,next) {
 
-       
-        var obj = fillDefaultAttributes(req.body);
+        request.body = fillDefaultAttributes(request.body);
+        var storedErrors = validatePost(request.body, "Post");
+
+        if(storedErrors.length <= 0) {
+        var obj = fillDefaultAttributes(request.body);
         var id = store.insert('videos', obj);
-        res.status(201).json(store.select('videos', id)).end();
+        respond.status(201).json(store.select('videos', id)).end();
+        }
+        else {
+            var errorTexts = new Error(storedErrors.join(" & "));
+            errorTexts.status = 406;
+        next(errorTexts);
 
+        }
     })
 
 
@@ -166,6 +175,7 @@ function validatePost(requestBody, crudOperation) {
             errors.push("Ranking has to be positive.");
         }
     }
+
     return errors;
 }
 
