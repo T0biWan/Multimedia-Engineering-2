@@ -60,13 +60,11 @@ videos.route('/')
         error.status = 405;
         next(error);
 
-})
-
+    })
     .patch(function (request,respond,next) {
         var error = new Error("If you want to update a video you need to call the 'post' Method or add an ID");
         error.status = 405;
         next(error);
-
     })
 
     .delete(function (request,respond,next) {
@@ -78,17 +76,32 @@ videos.route('/')
 
 // CRUD Operations for ID route
 videos.route('/:id')
+    //@TODO: Umschreiben
     .get(function (request,respond,next) {
-     var  videoSelection = store.select('videos',req.params.id);
-        if(videoSelection === undefined) {
-            var error = new Error("The ID you entered is not specified");
-            error.status(404);
-            next(error);
-        }
-        else {respond.status(200).json(videoSelection).end()}
+    //check if id is a number
+    var incorrectType = checkIfParamIsANumber(request.params.id);
+    
+    // if ID isn't a number call next with Error
+    if(incorrectType){
+        
+        next(incorrectType);
+    }
+    // if there is no video in the db with this id, return an error
+    else if(store.select('videos',request.params.id) === undefined){
+        
+        var error = new Error("The ID you entered is not specified");
+        error.status = 404;
+        next(error);
+    }
+    // select video by id 
+    else{
+        
+        var videoSelection = store.select('videos',request.params.id);
+        respond.status(200).json(videoSelection).end();
+    }
+    
     })
-
-
+    // @TODO: umschreiben
     .put(function (request,respond,next) {
         store.replace('videos', request.params.id, request.body);
         respond.status(200).end();
@@ -179,13 +192,13 @@ function validatePost(requestBody, crudOperation) {
     return errors;
 }
 
-function correctInput(id) {
+function checkIfParamIsANumber(id) {
     var inputID = Number(id);
-    if (Number.isNotValid(inputID)){
+    
+    if (Number.isNaN(inputID)){
         var error = new Error("The request just accepts digits.");
-              error.status = 406;
-               return error;
-
+        error.status = 406;
+        return error;
     }
 }
 
