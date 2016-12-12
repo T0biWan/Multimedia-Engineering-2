@@ -77,16 +77,30 @@ videos.route('/')
 
 // CRUD Operations for ID route
 videos.route('/:id')
-    .get(function (request, respond, next) {
-        var videoSelection = store.select('videos', req.params.id);
-        if (videoSelection === undefined) {
+//@TODO: Umschreiben
+    .get(function (request,respond,next) {
+        //check if id is a number
+        var incorrectType = checkIfParamIsANumber(request.params.id);
+
+        // if ID isn't a number call next with Error
+        if(incorrectType){
+
+            next(incorrectType);
+        }
+        // if there is no video in the db with this id, return an error
+        else if(store.select('videos',request.params.id) === undefined){
+
             var error = new Error("The ID you entered is not specified");
-            error.status(404);
+            error.status = 404;
             next(error);
         }
-        else {
-            respond.status(200).json(videoSelection).end()
+        // select video by id
+        else{
+
+            var videoSelection = store.select('videos',request.params.id);
+            respond.status(200).json(videoSelection).end();
         }
+
     })
 
 
