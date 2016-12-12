@@ -27,49 +27,48 @@ var internalKeys = {id: 'number', timestamp: 'number'};
 
 // routes **********************
 videos.route('/')
-    .get(function(request, respond, next) {
-        var videos = store.select('videos');
-        if (videos === undefined) {
-            respond.status(204).json({}).end();
-        } else {
-        respond.status(200).json(videos).end();
+    .get(function (request, respond, next) {
+        if (!store.select('videos')) {
+            respond.status(204).json(store.select('videos')).end();
+        }
+        respond.status(200).json(store.select('videos')).end();
 
-    }})
-    .post(function(request,respond,next) {
+    })
+    .post(function (request, respond, next) {
 
         request.body = fillDefaultAttributes(request.body);
         var storedErrors = validatePost(request.body, "Post");
 
-        if(storedErrors.length <= 0) {
-        var obj = fillDefaultAttributes(request.body);
-        var id = store.insert('videos', obj);
-        respond.status(201).json(store.select('videos', id)).end();
+        if (storedErrors.length <= 0) {
+            var obj = fillDefaultAttributes(request.body);
+            var id = store.insert('videos', obj);
+            respond.status(201).json(store.select('videos', id)).end();
         }
         else {
-            var errorTexts = new Error(storedErrors.join(" & "));
+            var errorTexts = new Error(errors.join(" & "));
             errorTexts.status = 406;
-        next(errorTexts);
+            next(errorTexts);
 
         }
     })
 
 
-// CRUD OPERATIONS WHICH ARE NOT ALLOWED IN THIS ROUTE
-    .put(function (request,respond,next) {
+    // CRUD OPERATIONS WHICH ARE NOT ALLOWED IN THIS ROUTE
+    .put(function (request, respond, next) {
         var error = new Error("If you want to update a vidceo you need to call the 'post' Method or add an ID");
         error.status = 405;
         next(error);
 
-})
+    })
 
-    .patch(function (request,respond,next) {
+    .patch(function (request, respond, next) {
         var error = new Error("If you want to update a video you need to call the 'post' Method or add an ID");
         error.status = 405;
         next(error);
 
     })
 
-    .delete(function (request,respond,next) {
+    .delete(function (request, respond, next) {
         var error = new Error("If you want to delete a video you need to add an ID to identify the desired video");
         error.status = 405;
         next(error);
@@ -78,36 +77,68 @@ videos.route('/')
 
 // CRUD Operations for ID route
 videos.route('/:id')
-    .get(function (request,respond,next) {
-     var  videoSelection = store.select('videos',req.params.id);
-        if(videoSelection === undefined) {
+    .get(function (request, respond, next) {
+        var videoSelection = store.select('videos', req.params.id);
+        if (videoSelection === undefined) {
             var error = new Error("The ID you entered is not specified");
             error.status(404);
             next(error);
         }
-        else {respond.status(200).json(videoSelection).end()}
+        else {
+            respond.status(200).json(videoSelection).end()
+        }
     })
 
 
-    .put(function (request,respond,next) {
-        store.replace('videos', request.params.id, request.body);
-        respond.status(200).end();
+    .put(function (request, respond, next) {
+        var incorrectType = checkIfParamIsANumber(request.params.id);
+        if (incorrectType) {
+            next(incorrectType);
+        }
+        else {
+
+            try {
+                var newObject = fillDefaultAttributes(request.body);
+                store.replace('videos', request.params.id, newVideo);
+                res.status(201).json(store.select('videos', request.params.id)).end();
+                store.replace('videos', request.params.id, newObject);
+                res.status(200).json(store.select('videos', request.params.id)).end();
+            } catch (e) {
+                var error = new Error("The ID you have given is not valid.");
+                error.status = 404;
+                next(error);
+            }
+        }
 
 
     })
-    .delete (function(request,respond,next) {
-        store.remove('videos', request.params.id);
-        respond.status(200).end(); })
+    .delete(function (request, respond, next) {
+        var error = checkIfParamIsANumber(request.params.id);
+        if (error) {
+            next(error);
+        }
+        else {
+            try {
+                store.remove('videos', request.params.id);
+                respond.status(204);
+            } catch (e) {
+                e.status = 404;
+                next(e);
+            }
 
-// CRUD OPERATIONS WHICH ARE NOT ALLOWED IN THIS ROUTE
+        }
 
-.post(function (request,respond,next) {
-    var error = new Error("It is not allowed to create a new video ID, just a new video with the 'Post' method for videos in general.");
-    error.status = 405;
-    next(error);
-    
-})
-    .patch(function(req, res, next){
+    })
+
+    // CRUD OPERATIONS WHICH ARE NOT ALLOWED IN THIS ROUTE
+
+    .post(function (request, respond, next) {
+        var error = new Error("It is not allowed to create a new video ID, just a new video with the 'Post' method for videos in general.");
+        error.status = 405;
+        next(error);
+
+    })
+    .patch(function (req, res, next) {
         var error = new Error("Video elements can be just replaced by the 'Post' method");
         error.status = 405;
         next(error);
@@ -179,49 +210,49 @@ function validatePost(requestBody, crudOperation) {
     return errors;
 }
 
-function correctInput(id) {
+function checkIfParamIsANumber(id) {
     var inputID = Number(id);
-    if (Number.isNotValid(inputID)){
+    if (Number.isNaN(inputID)) {
         var error = new Error("The request just accepts digits.");
-              error.status = 406;
-               return error;
+        error.status = 406;
+        return error;
 
     }
 }
 
-function fillDefaultAttributes(body){
+function fillDefaultAttributes(body) {
     //check description from req body
-    if(!body.description){
+    if (!body.description) {
         body.description = "";
-    }else {
+    } else {
         body.description = body.description;
     }
     //Check playcount
-    if(!body.playcount){
+    if (!body.playcount) {
         body.playcount = 0;
-    }else {
+    } else {
         body.playcount = body.playcount;
     }
 
     //check ranking
-    if(!body.ranking){
+    if (!body.ranking) {
         body.ranking = 0;
-    }else {
+    } else {
         body.ranking = body.ranking;
     }
 
     return {
-        title : body.title,
-        description : body.description,
-        src : body.src,
-        length : body.length,
-        playcount : body.playcount,
-        ranking : body.ranking
+        title: body.title,
+        description: body.description,
+        src: body.src,
+        length: body.length,
+        playcount: body.playcount,
+        ranking: body.ranking
     }
 }
 
 // this middleware function can be used, if you like (or remove it)
-videos.use(function(req, res, next){
+videos.use(function (req, res, next) {
     // if anything to send has been added to res.locals.items
     if (res.locals.items) {
         // then we send it as json and remove it
