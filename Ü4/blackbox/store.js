@@ -31,7 +31,7 @@ var currentTimestamp = (function () {
     return function () {
         return new Date().getTime();
     }
-});
+})();
 
 // our "in memory database" is a simple object!
 var memory = {};
@@ -42,7 +42,7 @@ var videos = [{
     description: '',
     src:"https://www.youtube.com/watch?v=FmH12c5loIs",
     length:7,
-    timestamp: globalCounter(),
+    timestamp: currentTimestamp(),
     playcount:0,
     ranking:0
 
@@ -52,7 +52,7 @@ var videos = [{
     description:"Getting started with the basics in Cinema 4D",
     src: "https://www.youtube.com/watch?v=nEdV3ruDcvw",
     length:900,
-    timestamp:globalCounter(),
+    timestamp:currentTimestamp(),
     playcount:2,
     ranking:5
 
@@ -119,6 +119,7 @@ var store = {
             throw new Error("element already has an .id value, but should not on insert!",e);
         }
         element.id = globalCounter();
+        element.timestamp = currentTimestamp();
         memory[type] = memory[type] || [];
         memory[type].push(getDeepObjectCopy(element));
         return element.id;
