@@ -80,6 +80,7 @@ videos.route('/:id')
 //@TODO: Umschreiben
     .get(function (request,respond,next) {
         //check if id is a number
+
         var incorrectType = checkIfParameterIsAValidNumber(request.params.id);
 
         // if ID isn't a number call next with Error
@@ -88,7 +89,7 @@ videos.route('/:id')
             next(incorrectType);
         }
         // if there is no video in the db with this id, return an error
-        else if(store.select('videos',request.params.id) === undefined){
+        else if(!store.select('videos',request.params.id)){
 
             var error = new Error("The ID you entered is not specified");
             error.status = 404;
