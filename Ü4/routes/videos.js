@@ -80,7 +80,7 @@ videos.route('/:id')
 //@TODO: Umschreiben
     .get(function (request,respond,next) {
         //check if id is a number
-        var incorrectType = checkIfParamIsANumber(request.params.id);
+        var incorrectType = checkIfParameterIsAValidNumber(request.params.id);
 
         // if ID isn't a number call next with Error
         if(incorrectType){
@@ -105,7 +105,7 @@ videos.route('/:id')
 
 
     .put(function (request, respond, next) {
-        var incorrectType = checkIfParamIsANumber(request.params.id);
+        var incorrectType = checkIfParameterIsAValidNumber(request.params.id);
         if (incorrectType) {
             next(incorrectType);
         }
@@ -127,7 +127,7 @@ videos.route('/:id')
 
     })
     .delete(function (request, respond, next) {
-        var error = checkIfParamIsANumber(request.params.id);
+        var error = checkIfParameterIsAValidNumber(request.params.id);
         if (error) {
             next(error);
         }
@@ -136,8 +136,9 @@ videos.route('/:id')
                 store.remove('videos', request.params.id);
                 respond.status(204);
             } catch (e) {
-                e.status = 404;
-                next(e);
+                var error = new Error("The ID you have given is not valid.");
+                error.status = 404;
+                next(error);
             }
 
         }
@@ -228,13 +229,18 @@ function validatePost(requestBody, crudOperation) {
  * @param id
  * @returns {Error}
  */
-function checkIfParamIsANumber(id) {
+function checkIfParameterIsAValidNumber(id) {
     var inputID = Number(id);
 
     if (Number.isNaN(inputID)) {
         var error = new Error("The request just accepts digits.");
         error.status = 406;
         return error;
+    } else if (inputID < 0) {
+        var error = new Error("The entered digits have to be positive.");
+        error.status = 400;
+        return error;
+
     }
 }
 
