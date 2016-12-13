@@ -29,10 +29,24 @@ var internalKeys = {id: 'number', timestamp: 'number'};
 videos.route('/')
     .get(function(req, res, next) {
         var videos = store.select('videos');
-        res.status(200).json(videos);
-        next();
+
+        if (videos === undefined){
+            res.status(204).json({}).end();
+        }
+        else {
+            res.status(200).json(videos).end();
+        }
     })
     .post(function(req,res,next) {
+        var error = new Error("This method is not allowed on this path, try another method");
+        error.status = 405;
+        next(error);
+    })
+    .delete(function(req,res,next) {
+
+        next();
+    })
+    .put(function(req,res, next) {
         var id = store.insert('videos', req.body);
         res.status(201).json(store.select('videos', id));
         next();
