@@ -220,20 +220,31 @@ function validatePost(requestBody, crudOperation) {
             errors.push("Ranking has to be positive.");
         }
     }
-
     return errors;
 }
 
+/**
+ * checks if ID is a number
+ * @param id
+ * @returns {Error}
+ */
 function checkIfParamIsANumber(id) {
     var inputID = Number(id);
+
     if (Number.isNaN(inputID)) {
         var error = new Error("The request just accepts digits.");
         error.status = 406;
         return error;
-
     }
 }
 
+
+/**
+ * set default Attributes for a new video object if they where not set in the body
+ *
+ * @param body
+ * @returns {{title, description: (string|*), src: (string|*|string|string|string|string), length, playcount: (*|number), ranking: (*|number)}}
+ */
 function fillDefaultAttributes(body) {
     //check description from req body
     if (!body.description) {
