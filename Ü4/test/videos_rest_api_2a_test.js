@@ -27,7 +27,7 @@ describe.skip('Task 2.a Filter', function() {
     var videoCorrect1Result = null;
     var videoCorrect2Result = null;
     var videoIDsCleanup = [];
-    describe.skip('/videos REST API Filtering', function() {
+    describe('/videos REST API Filtering', function() {
         // ask for correct filters
         it('should again create a video on post', function(done) {
             request(videoURL)

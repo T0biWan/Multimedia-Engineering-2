@@ -45,8 +45,8 @@ videos.route('/')
             respond.status(201).json(store.select('videos', id)).end();
         }
         else {
-            var errorTexts = new Error(errors.join(" & "));
-            errorTexts.status = 406;
+            var errorTexts = new Error(storedErrors.join(" & "));
+            errorTexts.status = 400;
             next(errorTexts);
 
         }
@@ -55,7 +55,7 @@ videos.route('/')
 
     // CRUD OPERATIONS WHICH ARE NOT ALLOWED IN THIS ROUTE
     .put(function (request, respond, next) {
-        var error = new Error("If you want to update a vidceo you need to call the 'post' Method or add an ID");
+        var error = new Error("If you want to update a video you need to call the 'post' Method or add an ID");
         error.status = 405;
         next(error);
 
@@ -77,7 +77,6 @@ videos.route('/')
 
 // CRUD Operations for ID route
 videos.route('/:id')
-//@TODO: Umschreiben
     .get(function (request,respond,next) {
         //check if id is a number
 
@@ -111,13 +110,11 @@ videos.route('/:id')
             next(incorrectType);
         }
         else {
-
+            var dummy = fillDefaultAttributes(request.body);
             try {
-                var newObject = fillDefaultAttributes(request.body);
-                store.replace('videos', request.params.id, newVideo);
-                res.status(201).json(store.select('videos', request.params.id)).end();
-                store.replace('videos', request.params.id, newObject);
-                res.status(200).json(store.select('videos', request.params.id)).end();
+
+                store.replace('videos', request.params.id, dummy);
+                respond.status(200).json(store.select('videos', request.params.id)).end();
             } catch (e) {
                 var error = new Error("The ID you have given is not valid.");
                 error.status = 404;

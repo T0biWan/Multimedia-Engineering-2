@@ -122,7 +122,7 @@ describe.skip('Task 2.b Limits and Offset', function() {
         });
     });
     // here start the real limit/offset tests with the data inserted above **************
-    describe.skip("now testing limit and offset", function() {
+    describe("now testing limit and offset", function() {
         it('should deliver 2 videos less on offset=2', function(done) {
             request(videoURL)
                 .get('/?offset=2')
