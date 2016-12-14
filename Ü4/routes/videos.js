@@ -16,21 +16,34 @@
 var express = require('express');
 var logger = require('debug')('me2u4:videos');
 var store = require('../blackbox/store');
+var middleware = require('../restapi/middleware.js');
 
 var videos = express.Router();
+
 
 // if you like, you can use this for task 1.b:
 var requiredKeys = {title: 'string', src: 'string', length: 'number'};
 var optionalKeys = {description: 'string', playcount: 'number', ranking: 'number'};
 var internalKeys = {id: 'number', timestamp: 'number'};
 
+// Der Kompiler baut den Text aus der middlewaer.js an diese Stelle
+videos.use(middleware);
 
 // routes **********************
 videos.route('/')
     .get(function (request, respond, next) {
+       // Überprüfung ob der FIlter übergeben wurde
+
+
+
         if (!store.select('videos')) {
             respond.status(204).json(store.select('videos')).end();
         }
+
+        if(respond.locals.items && respond.locals.items.filter) {
+            clearNotAllowed(store.select('videos'));
+        }
+
         respond.status(200).json(store.select('videos')).end();
 
     })
@@ -215,7 +228,7 @@ function validatePost(requestBody, crudOperation) {
         // Ranking
         if (typeof requestBody.ranking != "number") {
             errors.push("Ranking has to be a number");
-        } else if (requestBody.ranking < 0) {
+        } else if (requestBody.ranking < 0) {cd
             errors.push("Ranking has to be positive.");
         }
     }
@@ -279,6 +292,19 @@ function fillDefaultAttributes(body) {
         ranking: body.ranking
     }
 }
+var clearNotAllowed = function (obj, filter) {
+    console.log('clearnotallowed, ');
+    var allowed = filter || allowedKeys;
+    console.log(allowed);
+    console.log(obj);
+    Object.keys(obj).forEach(function (key) {
+
+        if (allowed.indexOf(key) === -1) delete obj[key];
+    });
+    return obj;
+};
+
+
 
 // this middleware function can be used, if you like (or remove it)
 videos.use(function (req, res, next) {
