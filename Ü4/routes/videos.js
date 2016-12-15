@@ -52,6 +52,8 @@ videos.route('/')
             }
             if (limit || offset) {
                 console.log("videolist length :" + videolist.length);
+                limit = limit || videos.length;
+                offset = offset || 0;
                 if (offset >= videolist.length) {
 
                     var err = new Error("offset higher than database length");
@@ -60,8 +62,8 @@ videos.route('/')
                     return;
                 }
                 console.log("offset before slice :" + offset);
+                console.log("Limit before slice :" + limit);
                 console.log("videolist before slice :" + videolist);
-                limit = limit || videos.length;
                 videolist = videolist.slice(offset, limit + offset);
                 console.log("videolist after slice :" + videolist);
             }
