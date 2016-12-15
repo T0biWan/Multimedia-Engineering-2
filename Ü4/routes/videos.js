@@ -25,28 +25,51 @@ var videos = express.Router();
 var requiredKeys = {title: 'string', src: 'string', length: 'number'};
 var optionalKeys = {description: 'string', playcount: 'number', ranking: 'number'};
 var internalKeys = {id: 'number', timestamp: 'number'};
+var allowedKeys = ["id", "timestamp", "title", "src", "length", "description", "playcount", "ranking"];
 
+console.log("start VIDEOS");
 // Der Kompiler baut den Text aus der middlewaer.js an diese Stelle
 videos.use(middleware);
-
+console.log("end middleware");
 // routes **********************
 videos.route('/')
+
     .get(function (request, respond, next) {
-       // Überprüfung ob der FIlter übergeben wurde
+        console.log("GET VIDEOS");
+        // Überprüfung ob der FIlter übergeben wurde
 
+        var videolist = store.select('videos');
+        if (!videolist) respond.status(204).json(videolist).end();
+        if (respond.locals.items) {
+            var filter = respond.locals.items.filter;
+            var limit = respond.locals.items.limit;
+            var offset = respond.locals.items.offset;
 
+            if (filter) {
+                videolist.forEach(function (videolist) {
+                    clearNotAllowed(videolist, filter);
+                });
+            }
+            if (limit || offset) {
+                console.log("videolist length :" + videolist.length);
+                if (offset >= videolist.length) {
 
-        if (!store.select('videos')) {
-            respond.status(204).json(store.select('videos')).end();
+                    var err = new Error("offset higher than database length");
+                    err.status = 400;
+                    next(err);
+                    return;
+                }
+                console.log("offset before slice :" + offset);
+                console.log("videolist before slice :" + videolist);
+                limit = limit || videos.length;
+                videolist = videolist.slice(offset, limit + offset);
+                console.log("videolist after slice :" + videolist);
+            }
         }
-
-        if(respond.locals.items && respond.locals.items.filter) {
-            clearNotAllowed(store.select('videos'));
-        }
-
-        respond.status(200).json(store.select('videos')).end();
-
+        respond.status(200).json(videolist).end();
     })
+
+
     .post(function (request, respond, next) {
 
         request.body = fillDefaultAttributes(request.body);
@@ -90,30 +113,35 @@ videos.route('/')
 
 // CRUD Operations for ID route
 videos.route('/:id')
-    .get(function (request,respond,next) {
+    .get(function (request, respond, next) {
         //check if id is a number
 
         var incorrectType = checkIfParameterIsAValidNumber(request.params.id);
 
+        var videoSelection = store.select('videos', request.params.id);
+
         // if ID isn't a number call next with Error
-        if(incorrectType){
+        if (incorrectType) {
 
             next(incorrectType);
         }
         // if there is no video in the db with this id, return an error
-        else if(!store.select('videos',request.params.id)){
+        else if (!videoSelection) {
 
             var error = new Error("The ID you entered is not specified");
-            error.status = 404;
+            error.status = 204;
             next(error);
         }
         // select video by id
-        else{
-
-            var videoSelection = store.select('videos',request.params.id);
+        else {
+            if (respond.locals.items) {
+                var filter = respond.locals.items.filter;
+                if (filter) {
+                    clearNotAllowed(videoSelection, filter);
+                }
+            }
             respond.status(200).json(videoSelection).end();
         }
-
     })
 
 
@@ -147,9 +175,9 @@ videos.route('/:id')
                 store.remove('videos', request.params.id);
                 respond.status(204);
             } catch (e) {
-                var error = new Error("The ID you have given is not valid.");
-                error.status = 404;
-                next(error);
+
+                e.status = 404;
+                next(e);
             }
 
         }
@@ -228,7 +256,7 @@ function validatePost(requestBody, crudOperation) {
         // Ranking
         if (typeof requestBody.ranking != "number") {
             errors.push("Ranking has to be a number");
-        } else if (requestBody.ranking < 0) {cd
+        } else if (requestBody.ranking < 0) {
             errors.push("Ranking has to be positive.");
         }
     }
@@ -303,7 +331,6 @@ var clearNotAllowed = function (obj, filter) {
     });
     return obj;
 };
-
 
 
 // this middleware function can be used, if you like (or remove it)
