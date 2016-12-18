@@ -159,7 +159,7 @@ videos.route('/:id')
                 store.replace('videos', request.params.id, dummy);
                 respond.status(200).json(store.select('videos', request.params.id)).end();
             } catch (e) {
-                var error = new Error("The ID you have given is not valid.");
+                var error = new Error("The ID you entered is not specified.");
                 error.status = 404;
                 next(error);
             }
@@ -176,6 +176,7 @@ videos.route('/:id')
             try {
                 store.remove('videos', request.params.id);
                 respond.status(204);
+                next();
             } catch (e) {
 
                 e.status = 404;
@@ -319,7 +320,8 @@ function fillDefaultAttributes(body) {
         src: body.src,
         length: body.length,
         playcount: body.playcount,
-        ranking: body.ranking
+        ranking: body.ranking,
+        timestamp:body.timestamp
     }
 }
 var clearNotAllowed = function (obj, filter) {

@@ -50,7 +50,7 @@ middleware.use(function (request, respond, next) {
 
     // ob der ankommende request eine get methode ist & ob der Request einen Filter hat
     if (request.method === "GET" && request.query.offset) {
-        console.log("GET OFFSET middlware")
+        console.log("GET OFFSET middlware");
 
         var offset = parseInt(request.query.offset);
         if(isNaN(offset) || (offset < 0)){
@@ -77,7 +77,7 @@ middleware.use(function (request, respond, next) {
 
     // ob der ankommende request eine get methode ist & ob der Request einen Filter hat
     if (request.method === "GET" && request.query.limit) {
-        console.log("GET LIMIT middlware")
+        console.log("GET LIMIT middlware");
 
         var limit = parseInt(request.query.limit);
         if(isNaN(limit) || (limit < 1)){
