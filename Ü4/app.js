@@ -28,7 +28,6 @@ var videos = require('./routes/videos');
 
 
 // app creation
-var port = 3000;
 var app = express();
 
 // Middlewares *************************************************
@@ -45,6 +44,9 @@ app.use(restAPIchecks);
 
 // Routes ******************************************************
 app.use('/videos', videos);
+
+
+
 
 
 
@@ -92,8 +94,8 @@ if (app.get('env') === 'development') {
 app.listen(3000, function(err) {
     if (err !== undefined) {
         console.log('Error on startup, ',err);
-    } else {
-        console.log('Magic happens on port ' + port);
-        debug('Listening on port ' + port);
+    }
+    else {
+        debug('Listening on port 3000');
     }
 });

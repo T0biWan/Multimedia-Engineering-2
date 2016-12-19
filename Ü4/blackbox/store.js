@@ -26,10 +26,10 @@ var globalCounter = (function() {
     }
 })();
 
-//get current System-Timestamp in seconds
+//get current Systemtimestamp
 var currentTimestamp = (function () {
     return function () {
-        return new Date().getTime()/1000;
+        return new Date().getTime();
     }
 })();
 
@@ -58,7 +58,7 @@ var videos = [{
 
 }];
 
-memory.videos = videos;
+//memory.videos = videos;
 // some default store content could be added here
 
 //** private helper functions
@@ -119,6 +119,7 @@ var store = {
             throw new Error("element already has an .id value, but should not on insert!",e);
         }
         element.id = globalCounter();
+        element.timestamp = currentTimestamp();
         memory[type] = memory[type] || [];
         memory[type].push(getDeepObjectCopy(element));
         return element.id;
