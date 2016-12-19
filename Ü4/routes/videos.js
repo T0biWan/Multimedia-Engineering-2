@@ -207,63 +207,29 @@ function validatePost(requestBody, crudOperation) {
     var errors = [];
     if (crudOperation === "Post") {
         // To validate a CRUD-Operation other then POST use a other function...
-        // Multiple if-cases instead of if and else if cases so that every condition is tested.
+        // Multiple if-cases instead of if and else-if cases so that every condition is tested.
         // Otherwise the user had to change one error just to get the possible next one afterwards.
         // We want al errors at once in one Array.
-
-        // ID
-        if (requestBody.id) {
-            errors.push("The ID will be set automatically, please don't try to set it manually");
-        }
-
-        // Title
-        if (!requestBody.title) {
-            errors.push("A title is required");
-        } else if (typeof requestBody.title != "string") {
-            errors.push("Title has to be a String");
-        }
-
-        // Description
-        if (typeof requestBody.description != "string") {
-            errors.push("Description has to be a String");
-        }
-
-        // Source
-        if (!requestBody.src) {
-            errors.push("A source is required.");
-        } else if (typeof requestBody.src != "string") {
-            errors.push("Source has to be a String.");
-        }
-
-        // Length
-        if (!requestBody.length) {
-            errors.push("A length is required.");
-        } else if (typeof requestBody.length != "number") {
-            errors.push("Length has to be a number.");
-        } else if (requestBody.length < 0) {
-            errors.push("Length has to be positive.");
-        }
-
-        // Timestamp
-        if (requestBody.timestamp) {
-            errors.push("The Timestamp will be set automatically, please don't try to set it manually");
-        }
-
-        // Playcount
-        if (typeof requestBody.playcount != "number") {
-            errors.push("Playcount has to be a number");
-        } else if (requestBody.playcount < 0) {
-            errors.push("Playcount has to be positive.");
-        }
-
-        // Ranking
-        if (typeof requestBody.ranking != "number") {
-            errors.push("Ranking has to be a number");
-        } else if (requestBody.ranking < 0) {
-            errors.push("Ranking has to be positive.");
-        }
+        errorsForAttribute(errors, requestBody.id, "id", true, false, false);
+        errorsForAttribute(errors, requestBody.title, "title", true, false, false, "string");
+        errorsForAttribute(errors, requestBody.description, "description", false, false, false, "string");
+        errorsForAttribute(errors, requestBody.src, "src", false, true, false, "string");
+        errorsForAttribute(errors, requestBody.length, "length", false, true, true, "number");
+        errorsForAttribute(errors, requestBody.timestamp, "timestamp", true, false, false);
+        errorsForAttribute(errors, requestBody.playcount, "playcount", false, false, true, "number");
+        errorsForAttribute(errors, requestBody.ranking, "ranking", false, false, true, "number");
     }
     return errors;
+}
+
+function errorsForAttribute(array, attribute, attributName, isSetAutomatically, isRequired, requiredToBePositive, requiredDatatype) {
+    // Is it possible to get the name of for example requestBody.ranking, so that we get 'ranking'?
+    // Ich könnte vermutlich einfach als String den attribut namen übergeben und innendrin dann diesen mit requestbody.String verknüpfen...
+    if (isSetAutomatically === true) if (attribute) array.push(attributName + "  will be set automatically, please don't try to set it manually");
+    if (isRequired === true) if (!attribute) array.push("A " + attributeName + " is required.");
+    if (requiredDatatype) if (typeof attribute != requiredDatatype) array.push(attributName + " has to be a " + requiredDatatype);
+    if (requiredToBePositive === true) if (attribute < 0) array.push(attributName + " hast to be positive");
+    return array;
 }
 
 /**
