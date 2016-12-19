@@ -211,7 +211,7 @@ function validatePost(requestBody, crudOperation) {
         // Otherwise the user had to change one error just to get the possible next one afterwards.
         // We want al errors at once in one Array.
         errorsForAttribute(errors, requestBody.id, "id", true, false, false);
-        errorsForAttribute(errors, requestBody.title, "title", true, false, false, "string");
+        errorsForAttribute(errors, requestBody.title, "title", false, true, false, "string");
         errorsForAttribute(errors, requestBody.description, "description", false, false, false, "string");
         errorsForAttribute(errors, requestBody.src, "src", false, true, false, "string");
         errorsForAttribute(errors, requestBody.length, "length", false, true, true, "number");
