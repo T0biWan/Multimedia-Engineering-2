@@ -34,6 +34,10 @@ console.log("end middleware");
 // routes **********************
 videos.route('/')
 
+    /**
+    * select all videos in store and respond with status 200
+    *      if there is no video object in store, respond with status 204 and the empty body
+    */
     .get(function (request, respond, next) {
         console.log("GET VIDEOS");
         // Überprüfung ob der FIlter übergeben wurde
@@ -71,7 +75,12 @@ videos.route('/')
         respond.status(200).json(videolist).end();
     })
 
-
+    /**
+     * call method to fill required attributes of body, if they are not given in the body
+     * then check if the attributes has the correct format for post operation
+     *      if there are no errors insert the new object and respond with status 201 and the created object
+     *      otherwise join all errors and respond with status 406
+     */
     .post(function (request, respond, next) {
 
         request.body = fillDefaultAttributes(request.body);
@@ -92,20 +101,28 @@ videos.route('/')
 
 
     // CRUD OPERATIONS WHICH ARE NOT ALLOWED IN THIS ROUTE
+
+    /**
+     * make error with status 405 if put operation was called in this route
+     */
     .put(function (request, respond, next) {
         var error = new Error("If you want to update a video you need to call the 'post' Method or add an ID");
         error.status = 405;
         next(error);
-
     })
 
+    /**
+     * make error with status 405 if patch operation was called in this route
+     */
     .patch(function (request, respond, next) {
         var error = new Error("If you want to update a video you need to call the 'post' Method or add an ID");
         error.status = 405;
         next(error);
-
     })
 
+    /**
+     * make error with status 405 if delete operation was called in this route
+     */
     .delete(function (request, respond, next) {
         var error = new Error("If you want to delete a video you need to add an ID to identify the desired video");
         error.status = 405;
@@ -115,6 +132,13 @@ videos.route('/')
 
 // CRUD Operations for ID route
 videos.route('/:id')
+
+    /**
+     * call method to check if the id from the request has the correct format
+     *      if not call next with error with according status
+     *      else if there is no video in status with this id make error with status 404
+     * select video by id from request and respond with status 200
+     */
     .get(function (request, respond, next) {
         //check if id is a number
 
@@ -147,6 +171,14 @@ videos.route('/:id')
     })
 
 
+    /**
+     *  call method to check if the id from the request has the correct format
+     *      if not call next with error with according status
+     *  If the id is correct, try to create a new object with default attributes if attributes where not set in body but required
+     *  try to replace video in store with same id
+     *      if successful respond with status 200
+     *  if there ist no object with this id in store make error with status 404
+     */
     .put(function (request, respond, next) {
         var incorrectType = checkIfParameterIsAValidNumber(request.params.id);
         if (incorrectType) {
@@ -164,93 +196,106 @@ videos.route('/:id')
                 next(error);
             }
         }
-
-
     })
-    .delete(function (request, respond, next) {
-        var error = checkIfParameterIsAValidNumber(request.params.id);
-        if (error) {
-            next(error);
-        }
-        else {
-            try {
-                store.remove('videos', request.params.id);
-                respond.status(204);
-                next();
-            } catch (e) {
 
-                e.status = 404;
-                next(e);
+
+    /**
+     * call method to check if the id from the request has the correct format
+     *      if not call next with error with according status
+     * If the id is correct, try to remove the object with this id
+     *      if there ist no object with this id in store make error with status 404
+     * remove object with id from store
+     */
+     .delete(function (request, respond, next) {
+            var incorrectType = checkIfParameterIsAValidNumber(request.params.id);
+            if (incorrectType) {
+                next(incorrectType);
             }
+            else {
+                try {
+                    store.remove('videos', request.params.id);
+                    respond.status(204);
+                    next();
+                } catch (e) {
 
-        }
+                    e.status = 404;
+                    next(e);
+                }
+            }
+     })
 
-    })
 
     // CRUD OPERATIONS WHICH ARE NOT ALLOWED IN THIS ROUTE
-
+    /**
+    * make error with status 405 if delete operation was called in this route
+    */
     .post(function (request, respond, next) {
         var error = new Error("It is not allowed to create a new video ID, just a new video with the 'Post' method for videos in general.");
         error.status = 405;
         next(error);
 
     })
+
+    /**
+     * make error with status 405 if delete operation was called in this route
+     */
     .patch(function (req, res, next) {
         var error = new Error("Video elements can be just replaced by the 'Post' method");
         error.status = 405;
         next(error);
     });
 
-//auxiliary functions
 
-function validatePost(requestBody, crudOperation) {
-    var errors = [];
-    if (crudOperation === "Post") {
-        // To validate a CRUD-Operation other then POST use a other function...
-        // Multiple if-cases instead of if and else-if cases so that every condition is tested.
-        // Otherwise the user had to change one error just to get the possible next one afterwards.
-        // We want al errors at once in one Array.
-        errorsForAttribute(errors, requestBody.id, "id", true, false, false);
-        errorsForAttribute(errors, requestBody.title, "title", false, true, false, "string");
-        errorsForAttribute(errors, requestBody.description, "description", false, false, false, "string");
-        errorsForAttribute(errors, requestBody.src, "src", false, true, false, "string");
-        errorsForAttribute(errors, requestBody.length, "length", false, true, true, "number");
-        errorsForAttribute(errors, requestBody.timestamp, "timestamp", true, false, false);
-        errorsForAttribute(errors, requestBody.playcount, "playcount", false, false, true, "number");
-        errorsForAttribute(errors, requestBody.ranking, "ranking", false, false, true, "number");
+    //auxiliary functions
+
+    function validatePost(requestBody, crudOperation) {
+        var errors = [];
+        if (crudOperation === "Post") {
+            // To validate a CRUD-Operation other then POST use a other function...
+            // Multiple if-cases instead of if and else-if cases so that every condition is tested.
+            // Otherwise the user had to change one error just to get the possible next one afterwards.
+            // We want al errors at once in one Array.
+            errorsForAttribute(errors, requestBody.id, "id", true, false, false);
+            errorsForAttribute(errors, requestBody.title, "title", false, true, false, "string");
+            errorsForAttribute(errors, requestBody.description, "description", false, false, false, "string");
+            errorsForAttribute(errors, requestBody.src, "src", false, true, false, "string");
+            errorsForAttribute(errors, requestBody.length, "length", false, true, true, "number");
+            errorsForAttribute(errors, requestBody.timestamp, "timestamp", true, false, false);
+            errorsForAttribute(errors, requestBody.playcount, "playcount", false, false, true, "number");
+            errorsForAttribute(errors, requestBody.ranking, "ranking", false, false, true, "number");
+        }
+        return errors;
     }
-    return errors;
-}
 
-function errorsForAttribute(array, attribute, attributName, isSetAutomatically, isRequired, requiredToBePositive, requiredDatatype) {
-    // Is it possible to get the name of for example requestBody.ranking, so that we get 'ranking'?
-    // Ich könnte vermutlich einfach als String den attribut namen übergeben und innendrin dann diesen mit requestbody.String verknüpfen...
-    if (isSetAutomatically === true) if (attribute) array.push(attributName + "  will be set automatically, please don't try to set it manually");
-    if (isRequired === true) if (!attribute) array.push("A " + attributeName + " is required.");
-    if (requiredDatatype) if (typeof attribute != requiredDatatype) array.push(attributName + " has to be a " + requiredDatatype);
-    if (requiredToBePositive === true) if (attribute < 0) array.push(attributName + " hast to be positive");
-    return array;
-}
-
-/**
- * checks if ID is a number
- * @param id
- * @returns {Error}
- */
-function checkIfParameterIsAValidNumber(id) {
-    var inputID = Number(id);
-
-    if (Number.isNaN(inputID)) {
-        var error = new Error("The request just accepts digits.");
-        error.status = 406;
-        return error;
-    } else if (inputID < 0) {
-        var error = new Error("The entered digits have to be positive.");
-        error.status = 400;
-        return error;
-
+    function errorsForAttribute(array, attribute, attributName, isSetAutomatically, isRequired, requiredToBePositive, requiredDatatype) {
+        // Is it possible to get the name of for example requestBody.ranking, so that we get 'ranking'?
+        // Ich könnte vermutlich einfach als String den attribut namen übergeben und innendrin dann diesen mit requestbody.String verknüpfen...
+        if (isSetAutomatically === true) if (attribute) array.push(attributName + "  will be set automatically, please don't try to set it manually");
+        if (isRequired === true) if (!attribute) array.push("A " + attributeName + " is required.");
+        if (requiredDatatype) if (typeof attribute != requiredDatatype) array.push(attributName + " has to be a " + requiredDatatype);
+        if (requiredToBePositive === true) if (attribute < 0) array.push(attributName + " hast to be positive");
+        return array;
     }
-}
+
+    /**
+     * checks if ID is a number
+     * @param id
+     * @returns {Error}
+     */
+    function checkIfParameterIsAValidNumber(id) {
+        var inputID = Number(id);
+
+        if (Number.isNaN(inputID)) {
+            var error = new Error("The request just accepts digits.");
+            error.status = 406;
+            return error;
+        } else if (inputID < 0) {
+            var error = new Error("The entered digits have to be positive.");
+            error.status = 400;
+            return error;
+
+        }
+    }
 
 
 /**
