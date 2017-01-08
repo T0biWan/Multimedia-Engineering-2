@@ -11,6 +11,6 @@ Dadurch wird express in der package.json als dependencie hinzugefügt.
 
 app.js aufbauen:
 use strict um JS einzuschränken
-Requires um Module verwenden zu können
+Requires um Module verwenden zu können, hier express
 Methode um alle request abzufangen und passende Antwort anbieten
 Funktion um Server zu starten

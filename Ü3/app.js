@@ -68,7 +68,6 @@ app.use(function(req, res, next) {
 
 //Tweets
 app.get('/tweets', function(req,res,next) {
-
     var tweets = store.select(req, res);
 
     for (var i = 0; i < tweets.length; i++){
@@ -78,14 +77,12 @@ app.get('/tweets', function(req,res,next) {
 
     var obj = {};
 
-
     //res.json(store.select('tweets'));
 });
 
 app.post('/tweets', function(req,res,next) {
     var id = store.insert('tweets', req.body); 
-    // set code 201 "created" and send the item back
-    res.status(201).json(store.select('tweets', id));
+    res.status(201).json(store.select('tweets', id)); // set code 201 "created" and send the item back
 });
 
 app.get('/tweets/:id', function(req,res,next) {
