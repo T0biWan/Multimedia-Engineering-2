@@ -86,7 +86,6 @@ middleware.use(function (request, respond, next) {
             next(err);
         }
         else {
-            // wenns noch keine items gibt, müssen wir welche anlegen
             if (!respond.locals.items) respond.locals.items = {};
             respond.locals.items.offset = offset;
         }
@@ -112,12 +111,12 @@ middleware.use(function (request, respond, next) {
          */
         var limit = parseInt(request.query.limit);
         if (isNaN(limit) || (limit < 1)) {
-            var err = new Error("Limit has to be a number and greater 0");
+            var err = new Error("Limit has to be a number and greater 1");
             err.status = 400;
             next(err);
+            return;
         }
         else {
-
             if (!respond.locals.items) respond.locals.items = {};
             respond.locals.items.limit = limit;
         }

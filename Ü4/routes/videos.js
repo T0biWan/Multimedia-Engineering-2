@@ -40,10 +40,11 @@ videos.route('/')
  */
     .get(function (request, respond, next) {
 
-        // Überprüfung ob der FIlter übergeben wurde
+
 
         var videolist = store.select('videos');
         if (!videolist) respond.status(204).json(videolist).end();
+
         if (respond.locals.items) {
             var filter = respond.locals.items.filter;
             var limit = respond.locals.items.limit;
