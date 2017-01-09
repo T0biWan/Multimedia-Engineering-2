@@ -33,7 +33,7 @@ var videoCorrectMax = cfg.videoCorrectMax;
 describe('Clean /video REST API with empty store', function() {
     var videoIDsCleanup = []; // will be used as temp-store in test...to cleanup videos at the end
     
-    it('should send status 204 and empty body on first request (empty database store)', function (done) {
+    it('should send status 204 and empty body on first request (empty mongoDB-data store)', function (done) {
         request(videoURL)
             .get('/')
             .set('Accept-Version', '1.0')

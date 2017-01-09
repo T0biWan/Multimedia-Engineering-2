@@ -27,7 +27,7 @@ var globalCounter = (function() {
 
 })();
 
-// our "in memory database" is a simple object!
+// our "in memory mongoDB-data" is a simple object!
 var memory = {};
 // some default store content could be added here
 

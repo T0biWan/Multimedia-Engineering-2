@@ -56,7 +56,7 @@ videos.route('/')
                 offset = offset || 0;
                 if (offset >= videolist.length) {
 
-                    var err = new Error("offset higher than database length");
+                    var err = new Error("offset higher than mongoDB-data length");
                     err.status = 400;
                     next(err);
                     return;

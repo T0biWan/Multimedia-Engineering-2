@@ -1,0 +1,3 @@
+Content-Type des zurückgelieferten Inhalts ändern, beispielsweise von text/html zu text/plain
+
+Dazu verwendet man respond.set()

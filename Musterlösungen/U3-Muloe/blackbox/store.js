@@ -53,7 +53,7 @@ var users = [
     }
 ];
 
-// our "in memory database" is a simple object!
+// our "in memory mongoDB-data" is a simple object!
 var memory = {};
 memory.tweets = tweets;
 memory.users = users;

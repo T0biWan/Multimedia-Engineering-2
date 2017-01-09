@@ -33,7 +33,7 @@ var currentTimestamp = (function () {
     }
 })();
 
-// our "in memory database" is a simple object!
+// our "in memory mongoDB-data" is a simple object!
 var memory = {};
 
 var videos = [{
