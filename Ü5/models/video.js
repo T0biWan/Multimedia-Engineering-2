@@ -1,3 +1,8 @@
+/**
+ * This Scheme defines the structure for the following Collection Scheme ("VideoScheme")
+ */
+
+
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
@@ -10,7 +15,7 @@ var VideoSchema = new Schema({
         ranking: {type: Number, min: 0, default: 0}
     },
 
-    {
+    {    // this options-object allows to set timestamp automatically
         timestamps: {createdAt: 'timestamp'}
 
 
@@ -18,5 +23,5 @@ var VideoSchema = new Schema({
 );
 
 
-
+// creating Constructorfunction which offer static functions like find() or update()
 module.exports = mongoose.model('Video', VideoSchema);

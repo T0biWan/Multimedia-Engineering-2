@@ -14,13 +14,19 @@ var express = require('express');
 var logger = require('debug')('me2u5:videos');
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost:27017/data');
+// Creating Model for requests with Scheme from ('../models/video')
 var VideoModel = require('../models/video');
 
 var videos = express.Router();
 
 
-// routes ******************************
+// Video routes without ID ******************************
 videos.route('/')
+/**
+ * find all videos in database and respond with status 201
+ *      if there is no video object in the db, respond with status 204 and the empty body
+ *      if there is no db respond with status 400 and show errormessage
+ */
     .get(function (request, respond, next) {
         respond.locals.processed = true;
         VideoModel.find({}, function (err, items) {
@@ -37,22 +43,33 @@ videos.route('/')
             }
         });
     })
+    /**
+     * Using the defined Scheme in VideoModel to check on consistence and create errors if datatypes are wrong or missing
+     *      if there are no errors insert the new object and respond with status 201 and the created object
+     *      otherwise join all errors and respond with status 400
+     */
     .post(function (request, respond, next) {
 
         respond.locals.processed = true;
         // request.body.timestamp = new Date().getTime();
+        // Using VideoModel to just edit fields which are defined in the Scheme
         var video = new VideoModel(request.body);
 
+        // check on consistence and create error if datatype is missing/wrong
         video.save(function (err) {
             if (!err) {
                 respond.status(201).json(video);
             } else {
                 err.status = 400;
-                err.message += ' in fields: ' + Object.getOwnPropertyNames(err.errors);
+                err.message += ' in fields: ' + Object.getOwnPropertyNames(err.errors); //slide 67
                 next(err);
             }
         });
     })
+
+    /**
+     * catch all other methodes and respond that these are not allowed on this route
+     */
     .all(function (req, res, next) {
         if (res.locals.processed) {
             next();
@@ -68,6 +85,11 @@ videos.route('/')
 // Video Routes with ID*********
 
 videos.route('/:id')
+/**
+ * Method to find video by ID and then respond with status 200 and video object
+ *      if there is no video with this ID or any other error, respond with status 404 and errormessage
+ *
+ */
     .get(function (request, respond, next) {
         respond.locals.processed = true;
 
@@ -82,24 +104,55 @@ videos.route('/:id')
         });
 
     })
+
+    /**
+     * Method to update video by ID and then respond with status 201
+     * For every key, check if there is a property in the request body and update it in this case
+     * ignore __v and timestamp
+     *      If there is no video with this ID or any other error, respond with status 405 and errormessage
+     */
     .put(function (req, res, next) {
+        // to respond with a modified object
         respond.locals.processed = true;
 
-        var id = parseInt(req.params.id);
-        if (id === req.body.id) {
-            // TODO replace store and use mongoose/MongoDB
-            // store.replace(storeKey, req.body.id, req.body);
-            res.status(200);
-            res.locals.items = store.select(storeKey, id);
-            res.locals.processed = true;
-            next();
-        }
-        else {
-            var err = new Error('id of PUT resource and send JSON body are not equal ' + req.params.id + " " + req.body.id);
-            err.status = codes.wrongrequest;
+        // if ID from route is same as ID from body create new empty video object
+        if (request.params.id == request.body._id) {
+            var video = {};
+            var schema = videoModel.schema;
+
+            // check for every key in object if there is a property for in the request body
+            //      when there is a property for a key, set the value key from the request body
+            Object.keys(schema.paths).forEach(function (key) {
+                if (request.body.hasOwnProperty(key)) video[key] = request.body[key];
+                // if there is no property for the key in the request body and it has to be a default value, set it to default
+                //      otherwise set the key to undefined
+                else {
+                    if (schema.paths[key].options.default !== undefined) video[key] = schema.paths[key].options.default;
+                    else video[key] = undefined;
+                }
+            });
+
+            video['updatedAt'] = Date.now();
+            // ignore __v and timestamp
+            delete video.__v;
+            delete video.timestamp;
+
+
+            videoModel.findByIdAndUpdate(request.params.id, video, {runValidators: true, new: true}, function (err, video) {
+                if (err) next(err);
+                else respond.status(201).json(video).end();
+            });
+        } else {
+            var err = new Error('ID mismatch between request and given Object: ' + request.params.id + ' != ' + request.body._id);
+            err.status = 405; //TODO: richtiger status? vielleicht 400??
             next(err);
         }
     })
+
+    /**
+     * Method to delete video by ID and then respond with status 204
+     *      if there is no video with this ID or any other error, respond with status 404 and errormessage
+     */
     .delete(function (request, respond, next) {
         respond.locals.processed = true;
 
@@ -114,10 +167,14 @@ videos.route('/:id')
         });
 
     })
-    //
+    /**
+     * Method to patch video by ID and then respond with status 200 and the updated video object
+     *      if there is no video with this ID or any other error, respond with status 406 and (joined) errormessages
+     */
      .patch(function (request, respond, next) {
         respond.locals.processed = true;
 
+         // flags to validate requestbody and set default values from scheme
         VideoModel.findByIdAndUpdate(id, request.body,
             {new: true, runValidators: true, setDefaultsOnInsert: true},
             function (err, video) {
@@ -130,7 +187,9 @@ videos.route('/:id')
                 }
             });
     })
-
+     /**
+      * catch all other methodes and respond that these are not allowed on this route
+      */
     .all(function (req, res, next) {
         if (res.locals.processed) {
             next();
