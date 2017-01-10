@@ -111,14 +111,14 @@ videos.route('/:id')
      * ignore __v and timestamp
      *      If there is no video with this ID or any other error, respond with status 405 and errormessage
      */
-    .put(function (req, res, next) {
+    .put(function (request, respond, next) {
         // to respond with a modified object
         respond.locals.processed = true;
 
         // if ID from route is same as ID from body create new empty video object
         if (request.params.id == request.body._id) {
             var video = {};
-            var schema = videoModel.schema;
+            var schema = VideoModel.schema;
 
             // check for every key in object if there is a property for in the request body
             //      when there is a property for a key, set the value key from the request body
@@ -138,7 +138,7 @@ videos.route('/:id')
             delete video.timestamp;
 
 
-            videoModel.findByIdAndUpdate(request.params.id, video, {runValidators: true, new: true}, function (err, video) {
+            VideoModel.findByIdAndUpdate(request.params.id, video, {runValidators: true, new: true}, function (err, video) {
                 if (err) next(err);
                 else respond.status(201).json(video).end();
             });
