@@ -1,2 +1,5 @@
 ﻿*node_modules
 *.idea
+*.wt
+Ü5/mongodb-data/diagnostic.data/*
+Ü5/mongodb-data/journal/*
