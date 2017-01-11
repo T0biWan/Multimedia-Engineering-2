@@ -1,7 +1,0 @@
-Statische Inhalte bei Request von /public/ ausliefern
-Beispiel: Browser fragt http://localhost:3000/public/index.html an und
-die statische Seite index.html aus dem Verzeichnis .\static wird ausgeliefert.
-
-Als erstes muss ein neues Verzeichnis 'static' angelegt werden.
-Dort wird dann Inhalt, zum Beispiel eine Internetseite bestehend aus HTML JS und CSS abgelegt.
-Wichtig ist das die Seite index.html heißt.
