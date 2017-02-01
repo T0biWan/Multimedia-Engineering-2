@@ -23,7 +23,7 @@ var videos = express.Router();
 // Video routes without ID ******************************
 videos.route('/')
 /**
- * find all videos in database and respond with status 201
+ * find all videos in database and respond with status 200
  *      if there is no video object in the db, respond with status 204 and the empty body
  *      if there is no db respond with status 400 and show errormessage
  */
@@ -32,7 +32,7 @@ videos.route('/')
         VideoModel.find({}, function (err, items) {
             if (!err) {
                 if (items.length > 0) {
-                    respond.status(201).json(items);
+                    respond.status(200).json(items);
                 } else {
                     respond.status(204).json();
                 }
@@ -112,7 +112,7 @@ videos.route('/:id')
      *      If there is no video with this ID or any other error, respond with status 405 and errormessage
      */
     .put(function (request, respond, next) {
-        // to respond with a modified object
+
         respond.locals.processed = true;
 
         // if ID from route is same as ID from body create new empty video object
@@ -129,7 +129,7 @@ videos.route('/:id')
                 else {
                     if (schema.paths[key].options.default !== undefined) video[key] = schema.paths[key].options.default;
                     else video[key] = undefined;
-                }
+        }
             });
 
             video['updatedAt'] = Date.now();
@@ -144,7 +144,7 @@ videos.route('/:id')
             });
         } else {
             var err = new Error('ID mismatch between request and given Object: ' + request.params.id + ' != ' + request.body._id);
-            err.status = 405; //TODO: richtiger status? vielleicht 400??
+            err.status = 406;
             next(err);
         }
     })
@@ -174,15 +174,14 @@ videos.route('/:id')
      .patch(function (request, respond, next) {
         respond.locals.processed = true;
 
-         // flags to validate requestbody and set default values from scheme
-        VideoModel.findByIdAndUpdate(id, request.body,
-            {new: true, runValidators: true, setDefaultsOnInsert: true},
+        VideoModel.findByIdAndUpdate(request.params.id, request.body,
+            {new: true, runValidators: true},
             function (err, video) {
                 if (!err) {
-                    res.status(200).json(video).end();
+                    respond.status(200).json(video).end();
                 } else {
                     err.status = 406;
-                    err.message += '. The video with the ID: ' + req.params.id + ', could not be updated.';
+                    err.message += '. The video with the ID: ' + request.params.id + ', could not be updated.';
                     next(err);
                 }
             });

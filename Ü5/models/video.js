@@ -17,8 +17,6 @@ var VideoSchema = new Schema({
 
     {    // this options-object allows to set timestamp automatically
         timestamps: {createdAt: 'timestamp'}
-
-
     }
 );
 
